@@ -1,0 +1,197 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cart-icon {
+  position: relative;
+  cursor: pointer;
+}
+
+.cart-item-count {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 12px;
+  border-radius: 50%;
+}
+
+.cart-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+}
+
+.cart-popup h2 {
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+.cart-popup .cart-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.cart-popup .cart-item div {
+  flex: 1;
+}
+
+.cart-popup .cart-address input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 5px;
+}
+
+.cart-popup button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cart-popup .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px;
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  color: #000;
+  cursor: pointer;
+}
+
+.product {
+  width: 200px;
+  padding: 20px;
+  margin: 10px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.product-name {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.product-price {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.product-description {
+  margin-bottom: 10px;
+}
+
+.product-category {
+  margin-bottom: 10px;
+}
+
+.product input[type="number"] {
+  width: 50px;
+  margin-bottom: 10px;
+}
+
+.product button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.product button:focus {
+  outline: none;
+}
+
+/* Additional styles for a webshop feel */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.product {
+  text-align: center;
+}
+
+
+.sold-out {
+  background-color: red;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.cart-popup {
+  width: 400px;
+}
+
+.cart-popup p {
+  margin-bottom: 10px;
+}
+
+.cart-popup button {
+  width: 100%;
+}
+
+.cart-popup .close-btn {
+  top: 5px;
+  right: 5px;
+  font-size: 20px;
+}
+
+.cart-popup .close-btn:hover {
+  color: #ff0000;
+}
+
+.product-offer {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.offer-badge {
+  background-color: #ff9800;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+.offer-price {
+  display: flex;
+  align-items: center;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #757575;
+  margin-right: 8px;
+}
+
+.discounted-price {
+  font-weight: bold;
+}
+
