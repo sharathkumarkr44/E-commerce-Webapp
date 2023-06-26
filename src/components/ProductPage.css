@@ -41,4 +41,52 @@
   button:hover {
     background-color: #0056b3;
   }
-  
+
+.chat-window {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}
+
+.conversation-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.conversation-button {
+  padding: 10px;
+  background-color: #f1f1f1;
+  border: none;
+  cursor: pointer;
+}
+
+.conversation-button.selected {
+  background-color: #ccc;
+}
+
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-message {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.chat-message strong {
+  font-weight: bold;
+}
+
+.chat-message input[type="text"],
+.chat-message button {
+  margin-top: 5px;
+}
+
+.timestamp {
+  font-size: 12px;
+  color: gray;
+}

@@ -22,8 +22,8 @@ login_manager.login_view = 'login'
 
 class Usernew(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    firstname = db.Column(db.String(80), unique=True, nullable=False)
-    lastname = db.Column(db.String(80), unique=True, nullable=False)
+    firstname = db.Column(db.String(80), nullable=False)
+    lastname = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     mobile = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
@@ -72,12 +72,18 @@ class Order(db.Model):
     pincode = db.Column(db.String(10), nullable=False)
     items = db.relationship('OrderItem', backref='order', lazy=True)
 
-
 class OrderItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     product_name = db.Column(db.String(100), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
+
+class ChatMessage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, nullable=False)
+    receiver_id = db.Column(db.Integer, nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 
 @login_manager.user_loader
@@ -180,9 +186,15 @@ def logout():
 def add_product():
     if request.method == 'GET':
         category = request.args.get('category')
-        if category is None:
+        searchValue = request.args.get('searchValue')
+        print(searchValue)
+        if category is None and searchValue is None:
             # Retrieve all products from the database
             products = Product.query.all()
+        elif searchValue is not None and category is None:
+            search = "%{}%".format(searchValue)
+            products = Product.query.filter(
+                Product.name.like(search)).all()
         else:
             category = category.replace("_", " ")
             products = Product.query.filter_by(category=category).all()
@@ -320,6 +332,123 @@ def get_products_by_category(category):
     serialized_products = [{'name': p.name, 'count': p.count, 'price': float(
         p.price), 'discounted_price': float(p.discounted_price)} for p in products]
     return jsonify(serialized_products)
+
+
+@app.route('/chat', methods=['POST'])
+def send_chat_message():
+    try:
+        data = request.get_json()
+        sender_id = int(data.get('sender_id'))
+        receiver_id = int(data.get('receiver_id'))
+        message = data.get('message')
+        
+        # Save the chat message to the database
+        chat_message = ChatMessage(sender_id=sender_id, receiver_id=receiver_id, message=message)
+        db.session.add(chat_message)
+        db.session.commit()
+        
+        return jsonify({'message': 'Chat message sent successfully'})
+    
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+
+@app.route('/chat', methods=['GET'])
+def get_chat_conversations():
+    try:
+        sender_id = request.args.get('sender_id')
+
+        # Retrieve chat conversations for the specified sender
+        sent_messages = ChatMessage.query.filter_by(sender_id=sender_id).all()
+        received_messages = ChatMessage.query.filter_by(receiver_id=sender_id).all()
+
+        conversations = []
+
+        # Group messages by receiver_id to form separate conversations
+        for msg in sent_messages:
+            conversation = next((conv for conv in conversations if conv['receiver_id'] == msg.receiver_id), None)
+            user = Usernew.query.filter_by(id=msg.sender_id).first()
+            if conversation:
+                conversation['messages'].append({
+                    'sender_id': msg.sender_id,
+                    'firstName': user.firstname,
+                    'message': msg.message,
+                    'timestamp': msg.timestamp,
+                    'type': 'sent'
+                })
+            else:
+                reciever_details = Usernew.query.filter_by(id=msg.receiver_id).first()
+                conversations.append({
+                    'receiver_id': msg.receiver_id,
+                    'reciever_name': reciever_details.firstname,
+                    'messages': [{
+                        'sender_id': msg.sender_id,
+                        'firstName': user.firstname,
+                        'message': msg.message,
+                        'timestamp': msg.timestamp,
+                        'type': 'sent'
+                    }]
+                })
+
+        for msg in received_messages:
+            conversation = next((conv for conv in conversations if conv['receiver_id'] == msg.sender_id), None)
+            user = Usernew.query.filter_by(id=msg.sender_id).first()
+            if conversation:
+                conversation['messages'].append({
+                    'sender_id': msg.sender_id,
+                    'firstName': user.firstname,
+                    'message': msg.message,
+                    'timestamp': msg.timestamp,
+                    'type': 'received'
+                })
+            else:
+                conversations.append({
+                    'receiver_id': msg.sender_id,
+                    'messages': [{
+                        'sender_id': msg.sender_id,
+                        'firstName': user.firstname,
+                        'message': msg.message,
+                        'timestamp': msg.timestamp,
+                        'type': 'received'
+                    }]
+                })
+
+        return jsonify(conversations)
+
+    except Exception as e:
+        return jsonify({'Error': str(e)})
+    
+@app.route('/usernew', methods=['GET'])
+def get_user_first_name():
+    receiver_id = request.args.get('id')
+
+    # Fetch user details from the 'usernew' table based on the receiver ID
+    user = Usernew.query.filter_by(id=receiver_id).first()
+
+    if user is None:
+        return jsonify(error='User not found'), 404
+
+    # User details found, send the first name in the response
+    return jsonify(firstName=user.firstname)
+
+    
+
+@app.route('/product/<int:product_id>', methods=['GET'])
+def get_product(product_id):
+    try:
+        product = Product.query.with_entities(Product.id, Product.name, Product.user_id).filter_by(id=product_id).first()
+        if product:
+            product_data = {
+                'id': product.id,
+                'name': product.name,
+                'user_id': product.user_id
+            }
+            return jsonify(product_data)
+        else:
+            return jsonify({'error': 'Product not found'})
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
 
 
 if __name__ == '__main__':

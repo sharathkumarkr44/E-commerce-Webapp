@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./BuyProductPage.css";
+import ReactDOM from "react-dom";
 import { useLocation } from "react-router-dom";
+import ChatWindow from "./ChatWindow";
+import ChatDialogBox from "./ChatDialogBox";
 
 const BuyProductPage = () => {
   const location = useLocation();
@@ -17,10 +20,17 @@ const BuyProductPage = () => {
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [sortBy, setSortBy] = useState(null);
   const category = searchParams.get("category");
+  const [showChat, setShowChat] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showChatDialog, setShowChatDialog] = useState(false);
+  const searchValue = searchParams.get("searchValue");
 
   let url = "http://127.0.0.1:8000/addproduct";
   if (category !== null) {
     url += `?category=${category}`;
+  }
+  if (searchValue !== null) {
+    url += `?searchValue=${searchValue}`;
   }
 
   useEffect(() => {
@@ -47,12 +57,7 @@ const BuyProductPage = () => {
       setOrderPlaced(true);
       localStorage.removeItem("orderPlaced");
     }
-  }, [category]);
-
-  // useEffect(() => {
-  //   const count = cart.reduce((total, item) => total + item.quantity, 0);
-  //   setCartItemCount(count);
-  // }, [cart]);
+  }, [category,searchValue]);
 
   const handleAddToCart = (product, quantity) => {
     const existingCartItemIndex = cart.findIndex(
@@ -69,54 +74,7 @@ const BuyProductPage = () => {
       setCart([...cart, cartItem]);
       localStorage.setItem("itemsInCart", JSON.stringify([...cart, cartItem]));
     }
-
-    // setShowCartPopup(false); // Show the cart popup
   };
-
-  // const handlePlaceOrder = () => {
-  //   if (cart.length > 0 && address && city && state && pincode) {
-  //     const items = cart.map((item) => ({
-  //       product_name: item.name,
-  //       quantity: item.quantity,
-  //     }));
-
-  //     const orderData = {
-  //       address: address,
-  //       city: city,
-  //       state: state,
-  //       pincode: pincode,
-  //       items: items,
-  //     };
-
-  //     fetch("http://127.0.0.1:8000/placeorder", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(orderData),
-  //     })
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         console.log(data.message); // Success message from the server
-  //         setCart([]); // Clear the cart
-  //         setAddress(""); // Clear the address field
-  //         setCity(""); // Clear the city field
-  //         setState(""); // Clear the state field
-  //         setPincode(""); // Clear the pincode field
-  //         localStorage.setItem("orderPlaced", "true"); // Set order placed status in local storage
-  //         window.location.reload(); // Refresh the page
-  //       })
-  //       .catch((error) => console.log(error));
-  //   }
-  // };
-
-  // const calculateTotalCartValue = () => {
-  //   const total = cart.reduce(
-  //     (accumulator, item) => accumulator + item.price * item.quantity,
-  //     0
-  //   );
-  //   return total.toFixed(2);
-  // };
 
   if (sortBy && sortBy === "PRICE_HIGH_TO_LOW") {
     sortedProducts.sort(
@@ -132,17 +90,37 @@ const BuyProductPage = () => {
     sortedProducts.sort((a, b) => b["name"] - a["name"]);
   }
 
-  console.log(sortedProducts);
+  const openChatDialog = (productId) => {
+    const selectedProduct = products.find((product) => product.id === productId);
+    setSelectedProduct(selectedProduct);
+    setShowChatDialog(true); // Show the chat dialog box
+  };
+  
+  
+
+  const closeChatDialog = () => {
+    setSelectedProduct(null);
+    setShowChatDialog(false);
+  };
+
+  const handleSendMessage = (message) => {
+    // Send the message to the seller
+    // You can implement the logic here to send the message to the backend or perform any other actions
+
+    console.log("Message:", message);
+  };
+
+  const toggleChat = () => {
+    const newWindow = window.open("", "_blank");
+    newWindow.document.write("<html><body><div id='chat-root'></div></body></html>");
+    newWindow.document.close();
+
+    const chatContainer = newWindow.document.getElementById("chat-root");
+    ReactDOM.render(<ChatWindow />, chatContainer);
+  };
 
   return (
     <div className="d-flex">
-      {/* Cart Icon */}
-      {/* <div className="cart-icon" onClick={() => setShowCartPopup(true)}>
-        <i className="fas fa-shopping-cart"></i>
-        {cartItemCount > 0 && (
-          <span className="cart-item-count">{cartItemCount}</span>
-        )}
-      </div> */}
       <div className="product-sidebar border">
         <div className="product-sort">
           <h4>Sort</h4>
@@ -152,102 +130,21 @@ const BuyProductPage = () => {
               name="sort"
               onChange={() => setSortBy("PRICE_HIGH_TO_LOW")}
               checked={sortBy && sortBy === "PRICE_HIGH_TO_LOW"}
-            ></input>{" "}
+            />
             Price - High to Low
           </label>
-          <br></br>
+          <br />
           <label>
             <input
               type="radio"
               name="sort"
               onChange={() => setSortBy("PRICE_LOW_TO_HIGH")}
               checked={sortBy && sortBy === "PRICE_LOW_TO_HIGH"}
-            ></input>{" "}
+            />
             Price - Low to High
           </label>
-          {/* <br></br>
-          <label>
-            <input
-              type="radio"
-              name="sort"
-              onChange={() => setSortBy("NAME_A_TO_Z")}
-              checked={sortBy && sortBy === "NAME_A_TO_Z"}
-            ></input>{" "}
-            Name - A to Z
-          </label>
-          <br></br>
-          <label>
-            <input
-              type="radio"
-              name="sort"
-              onChange={() => setSortBy("NAME_Z_TO_A")}
-              checked={sortBy && sortBy === "NAME_Z_TO_A"}
-            ></input>{" "}
-            Name - Z to A
-          </label> */}
         </div>
       </div>
-
-      {/* Cart Popup */}
-      {/* {showCartPopup && (
-        <div className="cart-popup">
-          <h2>Cart</h2>
-          {cart.length > 0 ? (
-            <>
-              {cart.map((item) => (
-                <div key={item.id} className="cart-item">
-                  <div>{item.name}</div>
-                  <div>Quantity: {item.quantity}</div>
-                </div>
-              ))}
-              <p>Total: € {calculateTotalCartValue()}</p>
-              <div className="cart-address">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Address"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                />
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="City"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                />
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="State"
-                  value={state}
-                  onChange={(e) => setState(e.target.value)}
-                />
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Pincode"
-                  value={pincode}
-                  onChange={(e) => setPincode(e.target.value)}
-                />
-              </div>
-              <button className="btn btn-primary" onClick={handlePlaceOrder}>
-                Place Order
-              </button>
-            </>
-          ) : (
-            <p>Your cart is empty.</p>
-          )}
-        </div>
-      )} */}
-
-      {/* Order Placed Message */}
-      {/* {orderPlaced && (
-        <div className="order-placed">
-          <h2>Order Placed Successfully!</h2>
-          <p>Thank you for your purchase.</p>
-        </div>
-      )} */}
 
       <div className="container">
         {sortedProducts.map((product) => (
@@ -255,19 +152,20 @@ const BuyProductPage = () => {
             key={product.id}
             className={`product ${product.isSold ? "sold" : ""}`}
           >
-            <img src="assets/apple.jpeg" alt={product.name} />
-            {/* <img src={`/assets/${product.image}`} alt={product.name} /> */}
+            <img
+              className="products"
+              src={"./assets/" + product.name + ".jpeg"}
+              alt={product.name}
+            />
             <div className="product-name">{product.name}</div>
             <div className="product-price">€ {product.discounted_price}</div>
-            {/* <div className="product-description">{product.description}</div> */}
-            {/* <div className="product-category">{product.category}</div> */}
+
             {product.count === 0 && <div className="sold-out">Sold Out</div>}
             {product.hasDiscount ? (
               <div className="product-offer">
                 <span className="offer-badge">Offer!</span>
                 <div className="offer-price">
                   <span className="original-price">€ {product.price}</span>
-                  {/* <span className="discounted-price">{product.price}</span> */}
                 </div>
               </div>
             ) : (
@@ -278,8 +176,9 @@ const BuyProductPage = () => {
                 </div>
               </div>
             )}
+
             {product.count > 0 && (
-              <>
+              <div>
                 <input
                   type="number"
                   min="1"
@@ -292,18 +191,39 @@ const BuyProductPage = () => {
                   onClick={() =>
                     handleAddToCart(
                       product,
-                      parseInt(document.getElementById(product.id).value)
+                      parseInt(
+                        document.getElementById(product.id).value
+                      )
                     )
                   }
                 >
                   Add to Cart
                 </button>
-              </>
+              </div>
             )}
+
+            <button
+              className="btn btn-secondary chat-button-product"
+              onClick={() => openChatDialog(product.id)}
+            >
+              Chat with Seller
+            </button>
           </div>
         ))}
       </div>
-      {/* Product List */}
+
+      <button className="chat-button" onClick={toggleChat}>
+        {showChat ? "Close Chat" : "Open Chat"}
+      </button>
+
+      {showChat && <ChatWindow />}
+
+      {showChatDialog && (
+        <ChatDialogBox
+          productId={selectedProduct ? selectedProduct.id : ""}
+          onSendMessage={handleSendMessage}
+        />
+      )}
     </div>
   );
 };

@@ -195,3 +195,92 @@
   font-weight: bold;
 }
 
+.chat-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #333;
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+.chat-window {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}
+
+.conversation-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.conversation-button {
+  padding: 10px;
+  background-color: #f1f1f1;
+  border: none;
+  cursor: pointer;
+}
+
+.conversation-button.selected {
+  background-color: #ccc;
+}
+
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-message {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.chat-message strong {
+  font-weight: bold;
+}
+
+.chat-message input[type="text"],
+.chat-message button {
+  margin-top: 5px;
+}
+
+.timestamp {
+  font-size: 12px;
+  color: gray;
+}
+
+.product {
+  text-align: center;
+  width: 250px;
+  /* height: 120px; */
+  height: auto;
+  margin: 10px;
+ padding: 2px;
+}
+
+.img {
+  max-width: 100%;
+  height: auto;
+}
+
+.item {
+  width: 120px;
+  min-height: 120px;
+  max-height: auto;
+  float: left;
+  margin: 3px;
+ padding: 3px;
+}
+

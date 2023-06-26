@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Navbar, Nav, NavDropdown, Button, Form } from "react-bootstrap";
-import gklogo from "../assets/gklogo.png";
+// import gklogo from "gklogo.png";
 import { BiCart } from "react-icons/bi";
 import { BsPerson } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import Cart from "./Cart";
 
 const Header = () => {
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [products, setProducts] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+  const handleChange = (value) => {
+    setSearchInput(value);
+    // fetchData(value);
+  };
 
   // useEffect(() => {
   //   if (selectedCategory !== "") {
@@ -33,15 +37,15 @@ const Header = () => {
   //     .catch((error) => console.log(error));
   // };
 
-  const handleCategorySelect = (category) => {
-    setSelectedCategory(category);
-  };
+  // const handleCategorySelect = (category) => {
+  //   setSelectedCategory(category);
+  // };
 
   return (
     <Navbar bg="white" expand="lg">
       <Navbar.Brand href="/">
         <img
-          src={gklogo}
+          src="./assets/gklogo.png"
           width="60"
           height="50"
           className="d-inline-block align-top"
@@ -104,15 +108,43 @@ const Header = () => {
           <Nav.Link href="/buyproduct">Products</Nav.Link>
           {/* <Nav.Link href="/buyproduct">Offers</Nav.Link> */}
         </Nav>
-        <Form className="d-flex">
-          <Form.Control
-            type="search"
-            placeholder="Search"
-            className="me-2"
-            aria-label="Search"
-          />
-          <Button variant="outline-success">Search</Button>
-        </Form>
+        <div>
+          <div>
+            {searchResults.map((product) => (
+              <div>
+                <img
+                  className="products"
+                  src={"./assets/" + product.name + ".jpeg"}
+                  alt={product.name}
+                />
+                <p>{product.name}</p>
+              </div>
+            ))}
+          </div>
+          <Form className="d-flex">
+            <Form.Control
+              value={searchInput}
+              onChange={(e) => handleChange(e.target.value)}
+              type="search"
+              placeholder="Search"
+              className="me-2"
+              aria-label="Search"
+            />
+            <Button variant="outline-success">
+              <Link
+                className="link-dark text-decoration-none"
+                to={{
+                  pathname: "/buyproduct",
+                  search: `?searchValue=${searchInput}`,
+                }}
+              >
+                Search
+              </Link>
+            </Button>
+
+            {/* <Button variant="outline-success">Search</Button> */}
+          </Form>
+        </div>
         <Nav.Link href="/Cart">
           <BiCart size={42} color="#198754" />
         </Nav.Link>

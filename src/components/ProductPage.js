@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import './ProductPage.css';
+import ReactDOM from 'react-dom';
+import ChatWindow from './ChatWindow';
 
 class AddProduct extends Component {
   constructor(props) {
@@ -12,6 +14,7 @@ class AddProduct extends Component {
       price: '',
       offer: '',
       offerDuration: '',
+      showChat: false,
     };
   }
 
@@ -146,7 +149,7 @@ class AddProduct extends Component {
           'Grapes',
         ];
       case 'Category 4':
-        return ['Chicken', 'Beaf', 'Mutton', 'Pork', 'Salmon', 'Duck', 'Turkey'];
+        return ['Chicken', 'Beef', 'Mutton', 'Pork', 'Salmon', 'Duck', 'Turkey'];
       default:
         return [];
     }
@@ -156,8 +159,18 @@ class AddProduct extends Component {
     return Array.from({ length: 10 }, (_, i) => String(i + 1));
   };
 
+  toggleChat = () => {
+    const newWindow = window.open('', '_blank');
+    newWindow.document.write('<html><body><div id="chat-root"></div></body></html>');
+    newWindow.document.close();
+  
+    const chatContainer = newWindow.document.getElementById('chat-root');
+    ReactDOM.render(<ChatWindow />, chatContainer);
+  };
+  
+
   render() {
-    const { category, name, description, count, price, offer, offerDuration } = this.state;
+    const { category, name, description, count, price, offer, offerDuration, showChat } = this.state;
 
     return (
       <div className="product-page">
@@ -244,6 +257,14 @@ class AddProduct extends Component {
           </div>
 
           <button type="submit">Submit</button>
+          {/* Chat Button */}
+          <button className="chat-button" onClick={this.toggleChat}>
+            {showChat ? 'Close Chat' : 'Open Chat'}
+          </button>
+
+          {/* Chat Component */}
+          {/* Render the chat window component conditionally based on showChat state */}
+          {showChat && <ChatWindow />}
         </form>
       </div>
     );
