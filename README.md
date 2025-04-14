@@ -41,7 +41,7 @@ Designed as part of academic coursework, GrocerKorb is a full-stack e-commerce p
 - **Icons:** `react-icons`
 
 ### 🔹 Backend (Optional / for Full-Stack)
-- **Node.js + Express**
+- **Flask**
 - **MySQL**
 - REST APIs for products, authentication, and orders
 
