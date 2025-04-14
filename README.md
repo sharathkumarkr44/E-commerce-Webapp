@@ -1,70 +1,52 @@
-# Getting Started with Create React App
+# 🛒 Full-Stack E-Commerce Application – GrocerKorb
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Designed as part of academic coursework, GrocerKorb is a full-stack e-commerce platform focused on delivering a smooth and responsive user experience for browsing, searching, and purchasing grocery items like vegetables, fruits, bakery products, and meat.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🌟 Features
 
-### `npm start`
+- 🧑‍💼 **User Authentication**
+  - Login, register, and logout functionality using local storage/session.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- 🛍️ **Product Catalog**
+  - Browse by category (Vegetables, Fruits, Bakery, Meat)
+  - Discounts and promotional display per category
+  - Image-rich card layouts
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- 🔍 **Search Functionality**
+  - Real-time search with search bar
+  - Category-based filtering using URL parameters
 
-### `npm test`
+- 🛒 **Shopping Cart**
+  - Add items to cart
+  - View cart contents
+  - Checkout simulation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## 📸 Screenshots
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![image](https://github.com/user-attachments/assets/131c330a-ef9f-4c20-8d55-043f3a7bfe8b)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## 🛠️ Tech Stack
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 🔹 Frontend
+- **React JS**
+- **React Bootstrap**
+- **React Router**
+- **Icons:** `react-icons`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 🔹 Backend (Optional / for Full-Stack)
+- **Node.js + Express**
+- **MySQL**
+- REST APIs for products, authentication, and orders
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project was completed as part of an academic module on full-stack web development. Key skills demonstrated include:
+* React component architecture and state management
+* API integration and routing
+* Responsive UI/UX design
+* Version control and deployment readiness
